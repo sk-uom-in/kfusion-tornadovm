@@ -1,27 +1,3 @@
-/*
- *  This file is part of Tornado-KFusion: A Java version of the KFusion computer vision
- *  algorithm running on TornadoVM.
- *  URL: https://github.com/beehive-lab/kfusion-tornadovm
- *
- *  Copyright (c) 2013-2019 APT Group, School of Computer Science,
- *  The University of Manchester
- *
- *  This work is partially supported by EPSRC grants Anyscale EP/L000725/1, 
- *  PAMELA EP/K008730/1, and EU Horizon 2020 E2Data 780245.
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- *
- */
 package kfusion.tornado.ui;
 
 import java.awt.event.ActionEvent;
@@ -50,15 +26,39 @@ public class TornadoConfigPanel extends JPanel implements ActionListener {
     public final JCheckBox enableTornadoCheckBox;
 
     private final TornadoModel config;
-
+    private int countDevices(TornadoBackend backend) {
+        int deviceCount = 0;
+        try {
+            int index = 0;
+            while (true) {
+                backend.getDevice(index);
+                deviceCount++;
+                index++;
+            }
+        } catch (IndexOutOfBoundsException e) {
+            // Finished counting devices
+        } catch (Exception e) {
+            System.err.println("Error counting devices: " + e.getMessage());
+        }
+        return deviceCount;
+    }
     private TornadoDevice[] getAllTornadoDevices() {
+        // System.out.println("Counting devices");
         final TornadoDevice[] devices;
         TornadoBackend driver = TornadoRuntime.getTornadoRuntime().getBackend(0);
         final List<TornadoDevice> tmpDevices = new ArrayList<>();
         if (driver != null) {
-            for (int devIndex = 0; devIndex < driver.getDeviceCount(); devIndex++) {
-                final TornadoDevice device = driver.getDevice(devIndex);
-                tmpDevices.add(device);
+            // System.out.println("Counting devices");
+            int deviceCount = countDevices(driver); // Use the new countDevices method
+            // System.out.println("Device count: " + deviceCount); // Debugging line
+            for (int devIndex = 0; devIndex < deviceCount; devIndex++) {
+                try {
+                    final TornadoDevice device = driver.getDevice(devIndex);
+                    tmpDevices.add(device);
+                } catch (IndexOutOfBoundsException e) {
+                    System.err.println("Device index out of bounds: " + devIndex); // Debugging line
+                    break;
+                }
             }
             devices = new TornadoDevice[tmpDevices.size()];
             tmpDevices.toArray(devices);
@@ -69,6 +69,7 @@ public class TornadoConfigPanel extends JPanel implements ActionListener {
     }
 
     public TornadoConfigPanel(final TornadoModel config) {
+        
         this.config = config;
         final TornadoDevice[] devices = getAllTornadoDevices();
         final TornadoDeviceSelection deviceSelectModel = new TornadoDeviceSelection(devices);

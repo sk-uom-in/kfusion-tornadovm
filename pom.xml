@@ -6,30 +6,32 @@
 
     <name>kfusion-tornadovm</name>
     <url>http://maven.apache.org</url>
-	<artifactId>kfusion-tornadovm</artifactId>
+    <artifactId>kfusion-tornadovm</artifactId>
     <organization>
-    	<name>The University of Manchester</name>
-    	<url>https://github.com/beehive-lab</url>
+        <name>The University of Manchester</name>
+        <url>https://github.com/beehive-lab</url>
     </organization>
     <groupId>kfusion-tornadovm</groupId>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <tornado.version>0.1.0-SNAPSHOT</tornado.version>
+        <javafx.version>22.0.1</javafx.version> <!-- JavaFX version updated to 22.0.1 -->
     </properties>
 
-	<repositories>
-     <repository>
-       <id>universityOfManchester-graal</id>
-       <url>https://raw.githubusercontent.com/beehive-lab/tornado/maven-tornadovm</url>
-     </repository>
-   </repositories>
+    <repositories>
+        <repository>
+            <id>universityOfManchester-graal</id>
+            <url>https://raw.githubusercontent.com/beehive-lab/tornado/maven-tornadovm</url>
+        </repository>
+    </repositories>
 
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
                 <configuration>
                     <source>21</source>
                     <target>21</target>
@@ -40,11 +42,10 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.5.1</version>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M5</version>
                 <configuration>
-                    <source>21</source>
-                    <target>21</target>
+                    <argLine>--enable-preview</argLine>
                 </configuration>
             </plugin>
             <plugin>
@@ -84,25 +85,23 @@
                     </execution>
                 </executions>
             </plugin>
-
-
         </plugins>
     </build>
 
     <dependencies>
+        <!-- TornadoVM dependencies -->
+        <dependency>
+            <groupId>tornado</groupId>
+            <artifactId>tornado-api</artifactId>
+            <version>1.0.6-dev</version>
+        </dependency>
+        <dependency>
+            <groupId>tornado</groupId>
+            <artifactId>tornado-matrices</artifactId>
+            <version>1.0.6-dev</version>
+        </dependency>
 
-     <dependency>
-         <groupId>tornado</groupId>
-         <artifactId>tornado-api</artifactId>
-         <version>1.0.6-dev</version>
-     </dependency>
-   
-     <dependency>
-         <groupId>tornado</groupId>
-         <artifactId>tornado-matrices</artifactId>
-         <version>1.0.6-dev</version>
-     </dependency>
-
+        <!-- System dependencies -->
         <dependency>
             <groupId>freenect</groupId>
             <artifactId>freenect</artifactId>
@@ -111,61 +110,71 @@
             <scope>system</scope>
         </dependency>
 
-    <dependency>
-      <groupId>org.ejml</groupId>
-      <artifactId>ejml-all</artifactId>
-      <version>0.38</version>
-    </dependency>
-    <dependency>
-      <groupId>net.java.dev.jna</groupId>
-      <artifactId>jna</artifactId>
-      <version>3.2.3</version>
-    </dependency>
-    <dependency>
-      <groupId>org.jogamp.jogl</groupId>
-      <artifactId>jogl-all-main</artifactId>
-      <version>2.1.4</version>
-    </dependency>
-    <dependency>
-      <groupId>org.jogamp.gluegen</groupId>
-      <artifactId>gluegen-rt-main</artifactId>
-      <version>2.1.4</version>
-    </dependency>
-    <dependency>
-        <groupId>org.apache.logging.log4j</groupId>
-        <artifactId>log4j-api</artifactId>
-        <version>2.17.1</version>
-    </dependency>
-    <dependency>
-        <groupId>org.apache.logging.log4j</groupId>
-        <artifactId>log4j-core</artifactId>
-        <version>2.17.1</version>
-    </dependency>
-    <dependency>
-      <groupId>ar.com.hjg</groupId>
-      <artifactId>pngj</artifactId>
-      <version>2.1.0</version>
-    </dependency>
-    <dependency>
-      <groupId>org.jfree</groupId>
-      <artifactId>jfreechart</artifactId>
-      <version>1.0.19</version>
-    </dependency>
-    <dependency>
-      <groupId>org.jfree</groupId>
-      <artifactId>jcommon</artifactId>
-      <version>1.0.23</version>
-    </dependency>
-    <dependency>
-      <groupId>gov.nist.math</groupId>
-      <artifactId>jama</artifactId>
-      <version>1.0.3</version>
-    </dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.13.1</version>
-      <scope>test</scope>
-    </dependency>
+        <!-- JavaFX dependencies -->
+
+            <dependency>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-controls</artifactId>
+                <version>${javafx.version}</version>
+            </dependency>
+
+
+        <!-- Additional dependencies -->
+        <dependency>
+            <groupId>org.ejml</groupId>
+            <artifactId>ejml-all</artifactId>
+            <version>0.38</version>
+        </dependency>
+        <dependency>
+            <groupId>net.java.dev.jna</groupId>
+            <artifactId>jna</artifactId>
+            <version>3.2.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jogamp.jogl</groupId>
+            <artifactId>jogl-all-main</artifactId>
+            <version>2.1.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jogamp.gluegen</groupId>
+            <artifactId>gluegen-rt-main</artifactId>
+            <version>2.1.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>2.17.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.17.1</version>
+        </dependency>
+        <dependency>
+            <groupId>ar.com.hjg</groupId>
+            <artifactId>pngj</artifactId>
+            <version>2.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jfree</groupId>
+            <artifactId>jfreechart</artifactId>
+            <version>1.0.19</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jfree</groupId>
+            <artifactId>jcommon</artifactId>
+            <version>1.0.23</version>
+        </dependency>
+        <dependency>
+            <groupId>gov.nist.math</groupId>
+            <artifactId>jama</artifactId>
+            <version>1.0.3</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.1</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 </project>
