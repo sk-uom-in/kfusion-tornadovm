@@ -16,7 +16,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <tornado.version>0.1.0-SNAPSHOT</tornado.version>
-        <javafx.version>21</javafx.version> <!-- JavaFX version updated to 22.0.1 -->
+        <javafx.version>21.0.2</javafx.version> <!-- JavaFX version updated to 21.0.2 -->
     </properties>
 
     <repositories>
